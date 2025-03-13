@@ -6,12 +6,11 @@
 #    By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 10:35:50 by jhapke            #+#    #+#              #
-#    Updated: 2025/02/20 11:49:47 by jhapke           ###   ########.fr        #
+#    Updated: 2025/03/06 10:06:29 by jhapke           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex.a
-PROG = pipex
+NAME = pipex
 
 SOURCE =	pipex.c\
 			pipex_utils.c\
@@ -31,29 +30,24 @@ LIBFT_A = $(LIBFT_DIR)/libft.a
 
 INCLUDES = -I $(LIBFT_DIR)
 
-all: ${PROG}
+all: ${NAME}
 
-${NAME}: ${OBJS}
-		$(CC) $(FLAGS) -c $(SOURCE) $(INCLUDES)
-		ar rcs ${NAME} ${OBJS}
-		ranlib ${NAME}
-
-${PROG}: ${OBJS} ${LIBFT_A}
-		$(CC) $(FLAGS) ${OBJS} -L${LIBFT_DIR} -lft -o ${PROG}
+${NAME}: ${OBJS} ${LIBFT_A}
+		$(CC) $(FLAGS) ${OBJS} -L${LIBFT_DIR} -lft -o ${NAME}
 		
 ${LIBFT_A}:
 		$(MAKE) -C $(LIBFT_DIR)
+
+%.o: %.c ${HEADER} ${LIBFT_H}
+		$(CC) $(FLAGS) -c $(INCLUDES) $< -o $@
 
 clean:
 		rm -rf ${OBJS}
 
 fclean: clean
-		rm -f ${NAME} ${PROG}
+		rm -f ${NAME}
 		$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-%.o: %.c ${HEADER} ${LIBFT_H}
-	$(CC) $(FLAGS) -c $(INCLUDES) $< -o $@
-
-.PHONY: all, clean, fclean, re
+.PHONY: all clean fclean re
