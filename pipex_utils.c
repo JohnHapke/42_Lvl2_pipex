@@ -6,17 +6,30 @@
 /*   By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:40:46 by jhapke            #+#    #+#             */
-/*   Updated: 2025/02/21 09:28:49 by jhapke           ###   ########.fr       */
+/*   Updated: 2025/03/20 08:30:40 by jhapke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 #include "libft.h"
 
+void	ft_closefds(int fds[2])
+{
+	close(fds[0]);
+	close(fds[1]);
+}
+
 void	ft_error_handler(int i, char *argv)
 {
 	if (i == 1)
-		printf("./pipex: %s: No such file or directory\n", argv);
+	{
+		ft_putstr_fd("./pipex: ", 2);
+		ft_putstr_fd(argv, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		write(2, "\n", 1);
+		exit(1);
+	}
 	else if (i == 2)
 	{
 		perror("pipe");
@@ -29,9 +42,9 @@ void	ft_error_handler(int i, char *argv)
 	}
 	else if (i == 4)
 	{
-		ft_putstr_fd("./pipex: ", 2);
+		ft_putstr_fd("./pipex: command not found: ", 2);
 		ft_putstr_fd(argv, 2);
-		ft_putstr_fd(": command does not exist\n", 2);
+		write(2, "\n", 1);
 	}
 }
 

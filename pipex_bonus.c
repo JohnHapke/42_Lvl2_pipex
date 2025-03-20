@@ -6,7 +6,7 @@
 /*   By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:02:02 by jhapke            #+#    #+#             */
-/*   Updated: 2025/03/19 12:24:20 by jhapke           ###   ########.fr       */
+/*   Updated: 2025/03/20 12:16:11 by jhapke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_execution(char *cmd, char **env)
 	}
 	if (execve(cmd_path, cmd_arg, env) == -1)
 	{
-		ft_error_handler(4, cmd);
+		perror("./pipex");
 		free(cmd_path);
 		ft_free(cmd_arg);
 		exit(126);
@@ -55,7 +55,6 @@ void	ft_process(int fds[2], char *argv, char **env)
 		dup2(fds[1], STDOUT_FILENO);
 		close(fds[0]);
 		ft_execution(argv, env);
-		exit(0);
 	}
 	else
 	{
@@ -65,30 +64,27 @@ void	ft_process(int fds[2], char *argv, char **env)
 	}
 }
 
-void	ft_filemanager(int argc, char **argv, int i)
+void	ft_filemanager(int argc, char **argv, int i, int here_doc)
 {
 	int	infile;
 	int	outfile;
 
-	if (i < argc - 1)
+	if (i < argc - 1 && here_doc == 0)
 	{
 		infile = open(argv[1], O_RDONLY);
 		if (infile == -1)
-		{
 			ft_error_handler(1, argv[1]);
-			exit(1);
-		}
 		dup2(infile, STDIN_FILENO);
 		close(infile);
 	}
-	else
+	else if (i == argc - 1)
 	{
-		outfile = open(argv[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (here_doc == 0)
+			outfile = open(argv[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else
+			outfile = open(argv[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (outfile == -1)
-		{
 			ft_error_handler(1, argv[i]);
-			exit(1);
-		}
 		dup2(outfile, STDOUT_FILENO);
 		close(outfile);
 	}
@@ -98,7 +94,6 @@ void	ft_here_doc(char **argv)
 {
 	int		here_doc_fds[2];
 	char	*line;
-	size_t	len;
 
 	if (pipe(here_doc_fds) == -1)
 		ft_error_handler(2, "pipe failed");
@@ -107,15 +102,14 @@ void	ft_here_doc(char **argv)
 		line = ft_get_next_line(STDIN_FILENO);
 		if (!line)
 			break ;
-		len = (ft_strlen(line));
-		while (line[len - 1] == '\n' || line[len - 1]  == '\0')
-			line[--len] = '\0';
-		if (ft_strncmp(line, argv[2], ft_strlen(argv[2])) == 0)
+		if (ft_strncmp(line, argv[2], ft_strlen(argv[2])) == 0
+			&& ft_strlen(line) == ft_strlen(argv[2]))
 		{
 			free (line);
 			break ;
 		}
 		write(here_doc_fds[1], line, ft_strlen(line));
+		write(here_doc_fds[1], "\n", 1);
 		free (line);
 	}
 	close(here_doc_fds[1]);
@@ -127,25 +121,26 @@ int	main(int argc, char **argv, char **env)
 {
 	int	fds[2];
 	int	i;
+	int	here_doc;
 
+	here_doc = 0;
 	if (argc >= 6 && ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
 		i = 3;
 		ft_here_doc(argv);
+		here_doc = 1;
 	}
-	else if (argc >= 5 && ft_strncmp(argv[1], "here_doc", 8) != 0)
-	{
+	else if (argc >= 5)
 		i = 2;
-		ft_filemanager(argc, argv, i);
-	}
 	else
 	{
 		write(2, "Usage: ./pipex infile cmd1 cmd2 outfile\n", 40);
 		exit(1);
 	}
-	while (i++ < argc - 2)
-		ft_process(fds, argv[i], env);
-	ft_filemanager(argc, argv, argc - 1);
+	ft_filemanager(argc, argv, i, here_doc);
+	while (i < argc - 2)
+		ft_process(fds, argv[i++], env);
+	ft_filemanager(argc, argv, argc - 1, here_doc);
 	ft_execution(argv[argc - 2], env);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:45:48 by jhapke            #+#    #+#             */
-/*   Updated: 2025/03/19 08:57:41 by jhapke           ###   ########.fr       */
+/*   Updated: 2025/03/20 09:14:23 by jhapke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**ft_getenv(char **env);
 void	ft_error_handler(int i, char *argv);
 void	ft_execution(char *cmd, char **env);
 void	ft_free(char **path);
-void	ft_filemanager(int argc, char **argv, int i);
+void	ft_filemanager(int argc, char **argv, int i, int here_doc);
 void	ft_here_doc(char **argv);
 void	ft_process(int fds[2], char *argv, char **env);
 

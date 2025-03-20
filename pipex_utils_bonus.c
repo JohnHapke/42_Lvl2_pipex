@@ -6,7 +6,7 @@
 /*   By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 10:49:22 by jhapke            #+#    #+#             */
-/*   Updated: 2025/03/18 11:24:03 by jhapke           ###   ########.fr       */
+/*   Updated: 2025/03/20 11:15:06 by jhapke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,21 @@ char	*ft_get_next_line(int fd_input)
 	str = malloc((i + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
-	ft_strlcpy(str, buffer, i);
+	ft_strlcpy(str, buffer, i + 1);
 	return (str);
 }
 
 void	ft_error_handler(int i, char *argv)
 {
 	if (i == 1)
-		ft_printf("./pipex: No such file or directory: %s\n", argv);
+	{
+		ft_putstr_fd("./pipex: ", 2);
+		ft_putstr_fd(argv, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		write(2, "\n", 1);
+		exit(1);
+	}
 	else if (i == 2)
 	{
 		perror("pipe");

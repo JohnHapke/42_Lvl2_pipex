@@ -6,7 +6,7 @@
 /*   By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:43:17 by jhapke            #+#    #+#             */
-/*   Updated: 2025/02/20 10:46:14 by jhapke           ###   ########.fr       */
+/*   Updated: 2025/03/20 08:28:10 by jhapke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdarg.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 void	ft_execution(char *cmd, char **env);
 char	**ft_getenv(char **env);
