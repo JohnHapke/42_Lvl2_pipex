@@ -75,4 +75,4 @@ This ensures the program properly manages memory across child processes.
 tbd
 
 #### Used Tests
-pipex-tester: https://github.com/vfurmane/pipex-tester
+pipex-tester: [https://github.com/mariadaan/PIPEXaminator](https://github.com/mariadaan/PIPEXaminator)
