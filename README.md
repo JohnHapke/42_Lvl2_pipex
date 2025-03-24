@@ -71,8 +71,7 @@ This ensures the program properly manages memory across child processes.
 - **Redirection**: Utilizes `dup2()` to redirect input/output between files and pipes.
 - **Command Execution**: Leverages `execve()` to replace process images with command executions.
 
-## Grade
-tbd
+## Grade: 125 / 100
 
 #### Used Tests
 pipex-tester: [https://github.com/mariadaan/PIPEXaminator](https://github.com/mariadaan/PIPEXaminator)
