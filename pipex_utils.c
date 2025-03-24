@@ -6,7 +6,7 @@
 /*   By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:40:46 by jhapke            #+#    #+#             */
-/*   Updated: 2025/03/20 08:30:40 by jhapke           ###   ########.fr       */
+/*   Updated: 2025/03/21 11:29:46 by jhapke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,7 @@ void	ft_error_handler(int i, char *argv)
 	if (i == 1)
 	{
 		ft_putstr_fd("./pipex: ", 2);
-		ft_putstr_fd(argv, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		write(2, "\n", 1);
-		exit(1);
+		perror(argv);
 	}
 	else if (i == 2)
 	{

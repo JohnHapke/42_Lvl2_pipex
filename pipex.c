@@ -6,7 +6,7 @@
 /*   By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:40:04 by jhapke            #+#    #+#             */
-/*   Updated: 2025/03/20 11:51:33 by jhapke           ###   ########.fr       */
+/*   Updated: 2025/03/21 08:48:49 by jhapke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ void	ft_parent(int fds[2], char **argv, char **env)
 
 	outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (outfile == -1)
+	{
 		ft_error_handler(1, argv[4]);
+		exit(1);
+	}
 	dup2(fds[0], STDIN_FILENO);
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
@@ -62,7 +65,10 @@ void	ft_child(int fds[2], char **argv, char **env)
 
 	infile = open(argv[1], O_RDONLY);
 	if (infile == -1)
+	{
 		ft_error_handler(1, argv[1]);
+		exit(1);
+	}
 	dup2(infile, STDIN_FILENO);
 	close(infile);
 	dup2(fds[1], STDOUT_FILENO);

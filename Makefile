@@ -6,7 +6,7 @@
 #    By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 10:35:50 by jhapke            #+#    #+#              #
-#    Updated: 2025/03/18 11:33:39 by jhapke           ###   ########.fr        #
+#    Updated: 2025/03/21 12:50:14 by jhapke           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SOURCE_B =	pipex_bonus.c\
 			pipex_utils_bonus.c\
 
 OBJS =		$(SOURCE:.c=.o)
-OBJS_B =	$(SOURCE_B:.c=.o)
+OBJS_B =	$(SOURCE_B:.c=.o) pipex_utils.o
 
 FLAGS = -Werror -Wall -Wextra
 

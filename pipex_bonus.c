@@ -6,12 +6,13 @@
 /*   By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:02:02 by jhapke            #+#    #+#             */
-/*   Updated: 2025/03/20 12:16:11 by jhapke           ###   ########.fr       */
+/*   Updated: 2025/03/21 12:05:34 by jhapke           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 #include "libft.h"
+#include "pipex.h"
 
 void	ft_execution(char *cmd, char **env)
 {
@@ -41,7 +42,7 @@ void	ft_execution(char *cmd, char **env)
 	}
 }
 
-void	ft_process(int fds[2], char *argv, char **env)
+void	ft_process(int fds[2], char **argv, char **env, int i)
 {
 	pid_t	pid;
 
@@ -52,41 +53,17 @@ void	ft_process(int fds[2], char *argv, char **env)
 		ft_error_handler(3, "fork failed");
 	if (pid == 0)
 	{
+		if (i == 2)
+			ft_infile_manager(argv);
 		dup2(fds[1], STDOUT_FILENO);
 		close(fds[0]);
-		ft_execution(argv, env);
+		ft_execution(argv[i], env);
 	}
 	else
 	{
 		close(fds[1]);
 		dup2(fds[0], STDIN_FILENO);
 		waitpid(pid, NULL, 0);
-	}
-}
-
-void	ft_filemanager(int argc, char **argv, int i, int here_doc)
-{
-	int	infile;
-	int	outfile;
-
-	if (i < argc - 1 && here_doc == 0)
-	{
-		infile = open(argv[1], O_RDONLY);
-		if (infile == -1)
-			ft_error_handler(1, argv[1]);
-		dup2(infile, STDIN_FILENO);
-		close(infile);
-	}
-	else if (i == argc - 1)
-	{
-		if (here_doc == 0)
-			outfile = open(argv[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else
-			outfile = open(argv[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (outfile == -1)
-			ft_error_handler(1, argv[i]);
-		dup2(outfile, STDOUT_FILENO);
-		close(outfile);
 	}
 }
 
@@ -137,10 +114,9 @@ int	main(int argc, char **argv, char **env)
 		write(2, "Usage: ./pipex infile cmd1 cmd2 outfile\n", 40);
 		exit(1);
 	}
-	ft_filemanager(argc, argv, i, here_doc);
 	while (i < argc - 2)
-		ft_process(fds, argv[i++], env);
-	ft_filemanager(argc, argv, argc - 1, here_doc);
+		ft_process(fds, argv, env, i++);
+	ft_filemanager(argv, argc - 1, here_doc);
 	ft_execution(argv[argc - 2], env);
 	return (0);
 }
