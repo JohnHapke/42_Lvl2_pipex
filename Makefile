@@ -5,56 +5,95 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jhapke <jhapke@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/02/19 10:35:50 by jhapke            #+#    #+#              #
-#    Updated: 2025/03/21 12:50:14 by jhapke           ###   ########.fr        #
+#    Created: 2024/12/26 15:55:53 by jhapke            #+#    #+#              #
+#    Updated: 2024/12/26 15:55:53 by jhapke           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex
+NAME = libft.a
 
-SOURCE =	pipex.c\
-			pipex_utils.c\
+SOURCE = ft_isalpha.c\
+		ft_isdigit.c\
+		ft_isalnum.c\
+		ft_isascii.c\
+		ft_isprint.c\
+		ft_strlen.c\
+		ft_memset.c\
+		ft_bzero.c\
+		ft_memcpy.c\
+		ft_memmove.c\
+		ft_strlcpy.c\
+		ft_strlcat.c\
+		ft_toupper.c\
+		ft_tolower.c\
+		ft_strchr.c\
+		ft_strrchr.c\
+		ft_strncmp.c\
+		ft_memchr.c\
+		ft_memcmp.c\
+		ft_strnstr.c\
+		ft_atoi.c\
+		ft_calloc.c\
+		ft_strdup.c\
+		ft_substr.c\
+		ft_strjoin.c\
+		ft_strtrim.c\
+		ft_split.c\
+		ft_itoa.c\
+		ft_strmapi.c\
+		ft_striteri.c\
+		ft_putchar_fd.c\
+		ft_putstr_fd.c\
+		ft_putendl_fd.c\
+		ft_putnbr_fd.c \
+		ft_printf_character.c\
+		ft_printf_decimal.c\
+		ft_printf_hexadecimal_low.c\
+		ft_printf_hexadecimal_up.c\
+		ft_printf_percent.c\
+		ft_printf_pointer.c\
+		ft_printf_string.c\
+		ft_printf_unsigned.c\
+		ft_printf.c\
 
-SOURCE_B =	pipex_bonus.c\
-			pipex_utils_bonus.c\
+SOURCE_B = 	ft_lstadd_back.c\
+			ft_lstnew.c\
+			ft_lstadd_front.c\
+			ft_lstclear.c\
+			ft_lstdelone.c\
+			ft_lstiter.c\
+			ft_lstlast.c\
+			ft_lstmap.c\
+			ft_lstsize.c\
 
-OBJS =		$(SOURCE:.c=.o)
-OBJS_B =	$(SOURCE_B:.c=.o) pipex_utils.o
+OBJS = $(SOURCE:.c=.o)
+
+OBJS_B = $(SOURCE_B:.c=.o)
 
 FLAGS = -Werror -Wall -Wextra
 
 CC = gcc
 
-HEADER = 	pipex.h
-HEADER_B =	pipex_bonus.h
-
-LIBFT_DIR = libft
-LIBFT_H = $(LIBFT_DIR)/libft.h
-LIBFT_A = $(LIBFT_DIR)/libft.a
-
-INCLUDES = -I $(LIBFT_DIR)
+HEADER = libft.h
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT_A) $(HEADER)
-		$(CC) $(FLAGS) $(INCLUDES) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
-		
-bonus: $(OBJS_B) $(LIBFT_A) $(HEADER_B)
-		$(CC) $(FLAGS) $(INCLUDES) $(OBJS_B) -L$(LIBFT_DIR) -lft -o $(NAME)
+$(NAME): 
+		$(CC) $(FLAGS) -c $(SOURCE)
+		ar rcs $(NAME) $(OBJS)
+		ranlib $(NAME)
 
-${LIBFT_A}:
-		$(MAKE) -C $(LIBFT_DIR)
-
-%.o: %.c ${HEADER} ${LIBFT_H}
-		$(CC) $(FLAGS) -c $(INCLUDES) $< -o $@
+bonus: $(OBJS_B)
+		$(AR) -r $(NAME) $?
+%.o: %.c
+		$(CC) -o $@ -c $(FLAGS) $<
 
 clean:
-		rm -rf ${OBJS} ${OBJS_B}
+		rm -rf $(OBJS) $(OBJS_B)
 
 fclean: clean
-		rm -f ${NAME}
-		$(MAKE) -C $(LIBFT_DIR) fclean
+		rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all, clean, fclean, re
