@@ -1,7 +1,7 @@
 # 42_pipex
 
 ## Purpose
-The purpose of the Pipex project is to create a command-line program in C that replicates the behavior of shell pipes. It connects two commands by redirecting the output of the first command as the input to the second command, reading from an input file and writing the final result to an output file.
+> The purpose of the Pipex project is to create a command-line program in C that replicates the behavior of shell pipes. It connects two commands by redirecting the output of the first command as the input to the second command, reading from an input file and writing the final result to an output file.
 
 ## Explanation of Behavior
 Pipex emulates the shell pipeline feature (e.g., `< infile cmd1 | cmd2 > outfile`). The program takes four main arguments: an input file, two commands, and an output file. It uses system calls like `fork()`, `pipe()`, `dup2()`, and `execve()` to:
